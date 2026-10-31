@@ -1,0 +1,2321 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    text-decoration: none;
+    border: none;
+    outline: none;
+
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+:root {
+    --text-color: #333;
+    --bg-color: #081b29;
+    --main-color: #00abf0;
+    --white-color: #fff;
+
+    --second-text-color: #555;
+
+    --cover-color: linear-gradient(45deg, #00abf0, #006e9a);
+    --pages-color: linear-gradient(90deg, #fff, #ddd);
+
+    --border: .125rem solid #00abf0;
+
+    --box-shadow: 0 0 .6rem rgba(0, 0, 0, .2);
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+html {
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+
+    background: var(--bg-color);
+
+    color: var(--text-color);
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   WRAPPER
+   - data-state="front" : livre fermé (couverture avant)
+   - data-state="open"  : livre ouvert
+   - data-state="back"  : livre refermé (couverture arrière)
+   --k (position) est pilotée par script.js ; la taille vient de la police de la page
+========================= */
+
+.wrapper {
+    --k: -1;                    /* position du livre, pilotée par script.js : -1 fermé, 0 ouvert, 1 refermé */
+    --shift: 14.5rem;           /* une demi-page : centre le livre fermé */
+    flex-shrink: 0;             /* le body est un flex : sans ça le livre s'écrase sur mobile */
+
+    position: relative;
+    width: 58rem;
+    height: 34rem;
+    perspective: 156rem;
+
+    /* Plus de "scale" : agrandir un livre en 3D avec scale le rend flou.
+       script.js change la taille de police de la page (tout est en rem),
+       donc le navigateur redessine textes et images à leur vraie taille. */
+    translate: calc(var(--shift) * var(--k, -1)) 0;
+
+    /* "backwards" : l'animation d'entrée ne laisse rien derrière elle une fois finie
+       (avec "forwards", le calque restait figé et pouvait rester flou) */
+    animation: show-animate 2s backwards;
+}
+
+@keyframes show-animate {
+    0%,30% {
+        opacity: 0;
+        transform: rotate(-20deg);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+}
+
+/* =========================
+   COUVERTURES
+   Chaque couverture a 2 faces : extérieure + intérieure.
+   Elle tourne autour du dos du livre (bord gauche de la moitié droite).
+========================= */
+
+.cover {
+    position: absolute;
+
+    /* dépasse un peu des pages, comme une vraie reliure */
+    top: -.5rem;
+    right: -.5rem;
+    width: calc(50% + .5rem);
+    height: calc(100% + 1rem);
+
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(.645, .045, .355, 1);
+}
+
+.cover.open {
+    transform: rotateY(-180deg);
+}
+
+.cover-front {
+    z-index: 100;
+    cursor: pointer;
+}
+
+.cover-front:not(.open):hover {
+    transform: rotateY(-7deg);      /* entrouvre légèrement au survol */
+}
+
+.cover-back {
+    z-index: 1;
+}
+
+
+/* ---- faces ---- */
+
+.cover-face {
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+
+    color: var(--white-color);
+
+    /* toile de la reliure + dégradé de la marque */
+    background:
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, .035) 0 1px, transparent 1px 3px),
+        var(--cover-color);
+
+    box-shadow: var(--box-shadow);
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* faces qui regardent le lecteur au départ */
+.cover-front .cover-outside,
+.cover-back .cover-inside {
+    transform: none;
+    border-radius: .2rem .7rem .7rem .2rem;
+}
+
+/* faces qui apparaissent une fois la couverture retournée */
+.cover-front .cover-inside,
+.cover-back .cover-outside {
+    transform: rotateY(180deg);
+    border-radius: .7rem .2rem .2rem .7rem;
+}
+
+/* ombre du dos du livre */
+.cover-face::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    background: linear-gradient(90deg, rgba(0, 0, 0, .35), transparent);
+    pointer-events: none;
+}
+
+/* rainure de la charnière */
+.cover-face::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 1.25rem;
+    width: 2px;
+    background: rgba(0, 0, 0, .25);
+    box-shadow: 1px 0 rgba(255, 255, 255, .22);
+    pointer-events: none;
+}
+
+.cover-front .cover-inside::before,
+.cover-back .cover-outside::before {
+    left: auto;
+    right: 0;
+    background: linear-gradient(270deg, rgba(0, 0, 0, .35), transparent);
+}
+
+.cover-front .cover-inside::after,
+.cover-back .cover-outside::after {
+    left: auto;
+    right: 1.25rem;
+    box-shadow: -1px 0 rgba(255, 255, 255, .22);
+}
+
+
+/* ---- cadre intérieur ---- */
+
+.cover-frame {
+    position: absolute;
+    inset: 1.1rem 1.1rem 1.1rem 2.4rem;
+
+    padding: 1.4rem 1.2rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+
+    text-align: center;
+
+    border: 1px solid rgba(255, 255, 255, .55);
+    border-radius: .4rem;
+}
+
+.cover-front .cover-inside .cover-frame,
+.cover-back .cover-outside .cover-frame {
+    inset: 1.1rem 2.4rem 1.1rem 1.1rem;
+}
+
+
+/* ---- contenu de la couverture avant ---- */
+
+.cover-icons {
+    display: flex;
+    gap: 1rem;
+
+    font-size: 2.2rem;
+    line-height: 1;
+}
+
+.cover-title {
+    font-size: 2.9rem;
+    font-weight: 800;
+    line-height: 1.05;
+}
+
+.cover-line {
+    display: block;
+    width: 4rem;
+    height: 2px;
+    background: rgba(255, 255, 255, .8);
+}
+
+.cover-name {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.cover-role {
+    font-size: .75rem;
+    line-height: 1.6;
+    opacity: .95;
+}
+
+.cover-net {
+    width: 82%;
+    margin-top: .4rem;
+    color: rgba(255, 255, 255, .85);
+}
+
+.cover-open {
+    display: inline-flex;
+    align-items: center;
+    gap: .2rem;
+
+    margin-top: .3rem;
+
+    font-size: .75rem;
+    font-weight: 500;
+}
+
+.cover-open i {
+    font-size: 1.1rem;
+    animation: nudge 1.6s ease-in-out infinite;
+}
+
+@keyframes nudge {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(.25rem); }
+}
+
+
+/* ---- contenu de la couverture arrière ---- */
+
+.cover-end-icon {
+    font-size: 2.8rem;
+}
+
+.cover-thanks {
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.cover-sub {
+    max-width: 17rem;
+
+    font-size: .75rem;
+    line-height: 1.6;
+    opacity: .95;
+}
+
+.cover-quote {
+    max-width: 17rem;
+
+    font-size: .95rem;
+    font-weight: 500;
+    line-height: 1.55;
+}
+
+.cover .cover-btn {
+    margin-top: .6rem;
+
+    background: transparent;
+    border: .125rem solid var(--white-color);
+    color: var(--white-color);
+
+    cursor: pointer;
+}
+
+.cover .cover-btn:hover {
+    background: var(--white-color);
+    color: #006e9a;
+}
+
+
+/* =========================
+   FOCUS CLAVIER (le reset global supprimait le contour)
+========================= */
+
+*:focus-visible {
+    outline: 2px solid var(--white-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--main-color);
+}
+
+
+/* =========================
+   BOOK
+========================= */
+
+.book {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    perspective: 250rem;
+
+    transform-style: preserve-3d;
+
+    z-index: 2;
+
+    /* le conteneur ne capte rien : seules les pages réagissent */
+    pointer-events: none;
+}
+
+.book > * {
+    pointer-events: auto;
+}
+
+
+
+
+/* =========================
+   PAGE GAUCHE
+========================= */
+
+.book-page.page-left {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    padding: 1.15rem;
+
+    background: var(--pages-color);
+
+    box-shadow: 0 0 .6rem rgba(0, 0, 0, .12);
+
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+
+    z-index: 3;
+
+    overflow: hidden;
+
+    transition: opacity .35s ease .65s;
+}
+
+.wrapper[data-state="front"] .book-page.page-left {
+    opacity: 0;
+}
+
+
+/* =========================
+   PAGE DROITE / FEUILLE
+========================= */
+
+.book-page.page-right {
+    position: absolute;
+
+    right: 0;
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    padding: 0;
+
+    background: transparent;
+
+    transform-style: preserve-3d;
+
+    transform-origin: left center;
+
+    transition: transform 1s cubic-bezier(.645, .045, .355, 1);
+
+    z-index: 4;
+}
+
+
+/* =========================
+   FEUILLE RETOURNÉE
+========================= */
+
+.book-page.page-right.turn {
+    transform: rotateY(-180deg);
+}
+
+
+/* =========================
+   FACES DES PAGES
+========================= */
+
+.page-front,
+.page-back {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 1.5rem 1.8rem;
+
+    background: var(--pages-color);
+
+    box-shadow: 0 0 .6rem rgba(0, 0, 0, .12);
+
+    overflow: hidden;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+
+/* =========================
+   FACE AVANT
+========================= */
+
+.page-front {
+    transform: rotateY(0deg) translateZ(1px);
+
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+}
+
+
+/* =========================
+   FACE ARRIÈRE
+========================= */
+
+.page-back {
+    transform: rotateY(180deg) translateZ(1px);
+
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+}
+
+
+/* =========================
+   PROFILE PAGE
+========================= */
+
+.profile-page {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+.profile-page img {
+    width: 11.9rem;
+    height: 11.9rem;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 50%;
+
+    border: .25rem solid var(--main-color);
+
+    margin-bottom: .8rem;
+
+    position: relative;
+    top: -.6rem;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================
+   NOM
+========================= */
+
+.profile-page h1 {
+    font-size: 1.65rem;
+
+    line-height: 1.1;
+
+    margin-bottom: .15rem;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   PROFESSION
+========================= */
+
+.profile-page h3 {
+    font-size: .82rem;
+
+    line-height: 1.3;
+
+    color: var(--main-color);
+
+    font-weight: 600;
+
+    max-width: 100%;
+}
+
+
+/* =========================
+   SOCIAL MEDIA
+========================= */
+
+.profile-page .social-media {
+    margin: .3rem 0 .4rem;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: .3rem;
+}
+
+
+.profile-page .social-media a {
+    display: inline-flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 1.8rem;
+    height: 1.8rem;
+
+    background: transparent;
+
+    border: var(--border);
+
+    border-radius: 50%;
+
+    font-size: .95rem;
+
+    color: var(--main-color);
+
+    transition: .3s;
+}
+
+
+.profile-page .social-media a:hover {
+    background: var(--main-color);
+
+    color: var(--white-color);
+}
+
+
+/* =========================
+   PARAGRAPHE
+========================= */
+
+.profile-page p {
+    width: 100%;
+
+    text-align: justify;
+
+    font-size: .7rem;
+
+    line-height: 1.4;
+
+    color: var(--text-color);
+}
+
+
+/* =========================
+   BOUTONS PROFIL
+========================= */
+
+.profile-page .btn-box {
+    margin-top: .55rem;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: .25rem;
+}
+
+
+.btn {
+    display: inline-flex;
+
+    width: 7.6rem;
+    height: 2.1rem;
+
+    background: var(--main-color);
+
+    border: var(--border);
+
+    border-radius: .3rem;
+
+    font-size: .72rem;
+
+    color: var(--white-color);
+
+    justify-content: center;
+    align-items: center;
+
+    gap: .3rem;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+
+.btn:hover {
+    background: transparent;
+
+    color: var(--main-color);
+}
+
+
+.btn-box .btn:nth-child(2) {
+    background: transparent;
+
+    color: var(--main-color);
+}
+
+
+.btn-box .btn:nth-child(2):hover {
+    background: var(--main-color);
+
+    color: var(--white-color);
+}
+
+
+/* =========================
+   TITRES DES PAGES
+========================= */
+
+.title {
+    margin-bottom: 1rem;
+
+    text-align: center;
+
+    font-size: 1.35rem;
+
+    color: var(--main-color);
+
+    line-height: 1.2;
+}
+
+
+/* =========================
+   TIMELINE
+========================= */
+
+.workeduc-box {
+    width: 100%;
+}
+
+
+.workeduc-content {
+    position: relative;
+
+    padding-left: .8rem;
+
+    margin-bottom: 1.2rem;
+
+    border-left: 2px solid var(--main-color);
+}
+
+
+/* =========================
+   CERCLE
+========================= */
+
+.workeduc-content::before {
+    content: '';
+
+    position: absolute;
+
+    top: 0;
+
+    left: -0.48rem;
+
+    width: .9rem;
+    height: .9rem;
+
+    background: var(--main-color);
+
+    border-radius: 50%;
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+.workeduc-content .year {
+    display: block;
+
+    font-size: .72rem;
+
+    color: var(--main-color);
+
+    margin-bottom: .35rem;
+}
+
+
+/* =========================
+   POSTE
+========================= */
+
+.workeduc-content h4 {
+    font-size: .78rem;
+
+    line-height: 1.35;
+
+    color: var(--text-color);
+
+    margin-bottom: .45rem;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.workeduc-content p {
+    font-size: .72rem;
+
+    line-height: 1.5;
+
+    color: var(--second-text-color);
+
+    text-align: justify;
+}
+
+
+/* =========================
+   NUMÉRO DE PAGE
+========================= */
+
+.number-page {
+    position: absolute;
+
+    bottom: 1rem;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    font-size: .7rem;
+
+    color: var(--second-text-color);
+}
+
+
+/* =========================
+   BOUTONS SUIVANT / PRÉCÉDENT
+========================= */
+
+.nextprev-btn {
+    position: absolute;
+
+    bottom: .7rem;
+    right: 1rem;
+
+    width: 2rem;
+    height: 2rem;
+
+    display: inline-flex;
+
+    justify-content: center;
+    align-items: center;
+
+    color: var(--main-color);
+
+    font-size: 1.5rem;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+
+.nextprev-btn:hover {
+    color: var(--text-color);
+
+    transform: scale(1.1);
+}
+
+
+/* =========================
+   BOUTON PRÉCÉDENT
+========================= */
+
+.nextprev-btn.back {
+    left: 1rem;
+    right: auto;
+}
+
+
+/* =========================
+   MOUVEMENT RÉDUIT
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .wrapper,
+    .cover,
+    .book-page.page-right {
+        transition-duration: .01s;
+    }
+
+    .wrapper {
+        animation: none;
+    }
+
+    .cover-open i {
+        animation: none;
+    }
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+.services-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .7rem;
+    width: 100%;
+}
+
+/* CADRES DES SERVICES */
+
+.services-box .services-content {
+    border: var(--border);
+    border-radius: .5rem;
+    padding: .65rem .5rem;
+    text-align: center;
+    background: transparent;
+
+    /* Même hauteur pour toutes les cartes */
+    min-height: 9.5rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.services-box .services-content:hover {
+    box-shadow: var(--box-shadow);
+}
+
+/* ICÔNES */
+
+.services-content i {
+    font-size: 2rem;
+    color: var(--main-color);
+    margin-bottom: .25rem;
+}
+
+/* TITRES */
+
+.services-content h3 {
+    font-size: .9rem;
+    line-height: 1.2;
+    color: var(--text-color);
+    margin-bottom: .3rem;
+}
+
+/* DESCRIPTION */
+
+.services-content p {
+    font-size: .72rem;
+    line-height: 1.35;
+    color: var(--second-text-color);
+
+    margin: 0 0 .5rem;
+}
+
+/* BOUTONS */
+
+.services-content .btn {
+    width: 6.5rem;
+    height: 1.8rem;
+    font-size: .72rem;
+
+    /* pousse le bouton en bas */
+    margin-top: auto;
+}
+
+/* =========================
+   COMPÉTENCES
+========================= */
+
+.skills-box {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: .55rem;
+
+    max-height: 26rem;
+
+    overflow-y: auto;
+
+    padding: .1rem .2rem .2rem 0;
+}
+
+
+/* =========================
+   CADRES DES COMPÉTENCES
+========================= */
+
+.skills-box .skills-content {
+    width: 100%;
+
+    padding: .55rem;
+
+    border: 1px solid rgba(0, 171, 240, .55);
+
+    border-radius: .4rem;
+
+    background: rgba(255, 255, 255, .25);
+
+    transition: .3s ease;
+}
+
+
+.skills-box .skills-content:hover {
+    box-shadow: var(--box-shadow);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   TITRES DES COMPÉTENCES
+========================= */
+
+.skills-content h3 {
+    display: flex;
+
+    align-items: center;
+
+    gap: .3rem;
+
+    font-size: .88rem;
+
+    line-height: 1.2;
+
+    color: var(--main-color);
+
+    margin-bottom: .4rem;
+}
+
+
+.skills-content h3 i {
+    font-size: 1rem;
+}
+
+
+/* =========================
+   CONTENU
+========================= */
+
+.skills-content .content {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: .25rem;
+}
+
+
+/* =========================
+   ÉLÉMENTS DE COMPÉTENCE
+========================= */
+
+.skills-content .content span {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: .2rem;
+
+    min-width: 3.9rem;
+
+    min-height: 1.8rem;
+
+    padding: .25rem .35rem;
+
+    border: 1px solid rgba(0, 171, 240, .45);
+
+    border-radius: .3rem;
+
+    background: rgba(255, 255, 255, .55);
+
+    color: var(--text-color);
+
+    font-size: .7rem;
+
+    font-weight: 500;
+
+    text-align: center;
+
+    transition: .3s ease;
+}
+
+
+/* =========================
+   HOVER COMPÉTENCE
+========================= */
+
+.skills-content .content span:hover {
+    background: var(--main-color);
+
+    color: var(--white-color);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 0 .4rem rgba(0, 171, 240, .3);
+}
+
+
+/* =========================
+   ICÔNES / LOGOS
+========================= */
+
+.skills-content .content span i {
+    font-size: .90rem;
+
+    color: var(--main-color);
+
+    flex-shrink: 0;
+}
+
+
+/* Icône blanche au survol */
+
+.skills-content .content span:hover i {
+    color: var(--white-color);
+}
+
+
+/* =========================
+   GROUPES DU DÉVELOPPEMENT
+========================= */
+
+.skills-group {
+    width: 100%;
+
+    margin-bottom: .35rem;
+}
+
+
+.skills-group:last-child {
+    margin-bottom: 0;
+}
+
+
+.skills-group h4 {
+    font-size: .72rem;
+
+    font-weight: 600;
+
+    color: var(--second-text-color);
+
+    margin-bottom: .25rem;
+}
+
+
+/* =========================
+   PETITE NOTE
+========================= */
+
+.skills-content small {
+    display: block;
+
+    margin-top: .35rem;
+
+    font-size: .62rem;
+
+    line-height: 1.3;
+
+    color: var(--second-text-color);
+
+    font-style: italic;
+}
+
+
+/* =========================
+   BARRE DE DÉFILEMENT
+========================= */
+
+.skills-box::-webkit-scrollbar {
+    width: 3px;
+}
+
+
+.skills-box::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+
+    border-radius: 10px;
+}
+
+
+.skills-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* =========================
+   PROJETS FULL STACK
+========================= */
+
+.portfolio-box {
+    width: 100%;
+
+    padding: .5rem;
+
+    border: var(--border);
+    border-radius: .6rem;
+
+    background: rgba(255, 255, 255, .25);
+
+    box-shadow: 0 0 .6rem rgba(0, 0, 0, .12);
+
+    transition: .3s ease;
+}
+
+.portfolio-box:hover {
+    box-shadow: var(--box-shadow);
+}
+
+
+/* =========================
+   IMAGE DU PROJET
+========================= */
+
+.portfolio-box .img-box {
+    display: flex;
+
+    width: 100%;
+    height: 11rem;
+
+    border: 1px solid rgba(0, 171, 240, .5);
+
+    border-radius: .4rem;
+
+    overflow: hidden;
+}
+
+
+.portfolio-box .img-box img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    background: #fff;
+
+    transition: .5s ease;
+}
+
+
+.portfolio-box .img-box:hover img {
+    transform: scale(1.03);
+}
+
+
+/* =========================
+   INFORMATIONS DU PROJET
+========================= */
+
+.portfolio-box .info-box {
+    margin: .7rem 0 .6rem;
+}
+
+
+/* =========================
+   TITRE + LIVE
+========================= */
+
+.portfolio-box .info-box .info-title {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: .4rem;
+}
+
+
+.portfolio-box .info-box .info-title h3 {
+    font-size: 1.15rem;   /* augmenté */
+
+    color: var(--text-color);
+}
+
+
+.portfolio-box .info-box .info-title a {
+    display: flex;
+
+    align-items: center;
+
+    gap: .2rem;
+
+    color: var(--main-color);
+
+    font-size: .75rem;   /* augmenté */
+
+    font-weight: 600;
+
+    transition: .3s;
+}
+
+
+.portfolio-box .info-box .info-title a:hover {
+    color: var(--text-color);
+}
+
+
+.portfolio-box .info-box .info-title a i {
+    font-size: .9rem;
+}
+
+
+/* =========================
+   TYPE DU PROJET
+========================= */
+
+.portfolio-box .project-type {
+    font-size: .76rem;
+
+    font-weight: 600;
+
+    color: var(--main-color);
+
+    margin-bottom: .35rem;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.portfolio-box .project-description {
+    font-size: .72rem;
+
+    line-height: 1.45;
+
+    color: var(--second-text-color);
+
+    text-align: justify;
+
+    margin-bottom: .4rem;
+}
+
+
+/* =========================
+   TECHNOLOGIES
+========================= */
+
+.portfolio-box .project-technologies {
+    font-size: .72rem;
+
+    line-height: 1.45;
+
+    color: var(--second-text-color);
+}
+
+
+.portfolio-box .project-technologies strong {
+    color: var(--text-color);
+}
+
+
+/* =========================
+   BOUTONS DU PROJET
+========================= */
+
+.project-buttons {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: .5rem;
+
+    margin-top: .7rem;
+}
+
+
+.project-buttons .btn {
+    width: 7.5rem;
+
+    height: 2rem;
+
+    font-size: .72rem;
+
+    gap: .3rem;
+}
+
+
+.project-buttons .btn i {
+    font-size: .9rem;
+}
+
+/* =========================
+   PROJETS RÉSEAUX & SYSTÈMES
+========================= */
+
+.network-project-page {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   CONTENEUR DU PROJET
+   Même style que portfolio-box
+========================= */
+
+.network-project {
+    width: 100%;
+
+    padding: .5rem;
+
+    border: var(--border);
+    border-radius: .6rem;
+
+    background: rgba(255, 255, 255, .25);
+
+    box-shadow: 0 0 .6rem rgba(0, 0, 0, .12);
+
+    transition: .3s ease;
+}
+
+.network-project:hover {
+    box-shadow: var(--box-shadow);
+}
+
+
+/* =========================
+   IMAGE DU PROJET
+========================= */
+
+.network-project-image {
+    display: flex;
+
+    width: 100%;
+    height: 11rem;
+
+    border: 1px solid rgba(0, 171, 240, .5);
+
+    border-radius: .4rem;
+
+    overflow: hidden;
+
+    background: #fff;
+}
+
+
+/* Image réelle */
+
+.network-project-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+
+    background: #fff;
+
+    transition: .5s ease;
+}
+
+
+/* Effet au survol */
+
+.network-project-image:hover img {
+    transform: scale(1.03);
+}
+
+
+/* =========================
+   PROJET À VENIR
+========================= */
+
+.project-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: .4rem;
+
+    color: var(--second-text-color);
+}
+
+
+.project-placeholder i {
+    font-size: 3rem;
+
+    color: var(--main-color);
+}
+
+
+.project-placeholder span {
+    font-size: .8rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   INFORMATIONS DU PROJET
+========================= */
+
+.network-project-info {
+    margin: .7rem 0 .6rem;
+}
+
+
+/* =========================
+   TITRE + APERÇU
+========================= */
+
+.network-project-info .network-info-title {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: .4rem;
+}
+
+
+.network-project-info .network-info-title h3 {
+    font-size: 1.15rem;
+
+    color: var(--text-color);
+}
+
+
+/* Lien aperçu */
+
+.network-project-info .network-info-title a {
+    display: flex;
+
+    align-items: center;
+
+    gap: .2rem;
+
+    color: var(--main-color);
+
+    font-size: .75rem;
+
+    font-weight: 600;
+
+    transition: .3s;
+}
+
+
+.network-project-info .network-info-title a:hover {
+    color: var(--text-color);
+}
+
+
+.network-project-info .network-info-title a i {
+    font-size: .9rem;
+}
+
+
+/* =========================
+   TYPE DU PROJET
+========================= */
+
+.network-project .project-type {
+    font-size: .76rem;
+
+    font-weight: 600;
+
+    color: var(--main-color);
+
+    margin-bottom: .35rem;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.network-project .project-description {
+    font-size: .72rem;
+
+    line-height: 1.45;
+
+    color: var(--second-text-color);
+
+    text-align: justify;
+
+    margin-bottom: .4rem;
+}
+
+
+/* =========================
+   TECHNOLOGIES
+========================= */
+
+.network-project .project-technologies {
+    font-size: .72rem;
+
+    line-height: 1.45;
+
+    color: var(--second-text-color);
+}
+
+
+.network-project .project-technologies strong {
+    color: var(--text-color);
+}
+
+
+/* =========================
+   BOUTONS DU PROJET
+========================= */
+
+.network-project-buttons {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: .5rem;
+
+    margin-top: .7rem;
+}
+
+
+.network-project-buttons .btn {
+    width: 7.5rem;
+
+    height: 2rem;
+
+    font-size: .72rem;
+
+    gap: .3rem;
+}
+
+
+.network-project-buttons .btn i {
+    font-size: .9rem;
+}
+
+.contact-box {
+    text-align: center;
+
+}
+
+.contact-box .field {
+    width: 100%;
+    background: transparent;
+    border: var(--border);
+    border-radius: .3rem;
+    padding: .3rem;
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+
+}
+
+.contact-box .field::placeholder {
+    color: var(--text-color);
+
+}
+
+.contact-box textarea {
+    resize: none;
+    height: 15rem;
+
+}
+
+.contact-box .btn {
+    cursor: pointer;
+}
+
+.back-profile {
+    position: absolute;
+    bottom: 1.2rem;
+    right: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: var(--border);
+    border-radius: .3rem;
+    font-size: 1.1rem;
+    color: var(--main-color);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: .5s;
+}
+
+.back-profile:hover {
+    background: var(--main-color);
+    color: var(--white-color);
+
+}
+
+.back-profile p {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scale(.5);
+    font-size: 1rem;
+    color: var(--main-color);
+    opacity: 0;
+    transition: .5s;
+}
+
+.back-profile:hover p {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    top: -1.8rem;
+
+}
+
+
+
+
+
+/* =========================
+   ATTRIBUT hidden (les .btn avaient display:inline-flex)
+========================= */
+
+[hidden] {
+    display: none !important;
+}
+
+
+/* =========================
+   EXPÉRIENCES : liste de points
+========================= */
+
+.work-points {
+    margin-top: .3rem;
+    padding-left: 1rem;
+}
+
+.work-points li {
+    margin-bottom: .45rem;
+
+    font-size: .78rem;
+    line-height: 1.55;
+
+    color: var(--second-text-color);
+}
+
+.workeduc-content h4 {
+    font-size: .82rem;
+}
+
+
+/* =========================
+   PROJETS : résultats + image de secours
+========================= */
+
+.project-results {
+    margin: 0 0 .4rem;
+    padding-left: 1rem;
+
+    font-size: .72rem;
+    line-height: 1.45;
+
+    color: var(--text-color);
+}
+
+.project-placeholder-wrap {
+    width: 100%;
+    height: 100%;
+}
+
+.portfolio-box .img-box .project-placeholder,
+.portfolio-box .img-box {
+    background: #fff;
+}
+
+
+/* =========================
+   CONTACT : coordonnées + message d'état
+========================= */
+
+.contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .4rem .9rem;
+
+    list-style: none;
+
+    margin-bottom: 1rem;
+}
+
+.contact-info a {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+
+    font-size: .8rem;
+    font-weight: 500;
+
+    color: var(--main-color);
+}
+
+.contact-info a:hover {
+    color: var(--text-color);
+}
+
+.contact-info i {
+    font-size: 1.1rem;
+}
+
+.contact-box textarea {
+    height: 10rem;
+}
+
+.contact-box .field {
+    font-size: .9rem;
+    margin-bottom: .8rem;
+}
+
+.form-status {
+    min-height: 1.2rem;
+    margin-top: .6rem;
+
+    font-size: .75rem;
+    font-weight: 500;
+}
+
+.form-status[data-kind="ok"]    { color: #1a8a4a; }
+.form-status[data-kind="error"] { color: #c0392b; }
+.form-status[data-kind="info"]  { color: var(--second-text-color); }
+
+
+/* =========================
+   PROJETS : lisibilité + boutons + image cliquable
+========================= */
+
+.portfolio-box .img-box,
+.network-project-image {
+    height: 9.5rem;                 /* un peu moins haute : laisse la place à un texte plus gros */
+}
+
+.portfolio-box .img-box img,
+.network-project-image img {
+    cursor: zoom-in;
+}
+
+/* le zoom au survol rendait l'image floue : on assombrit à peine à la place */
+.portfolio-box .img-box:hover img,
+.network-project-image:hover img {
+    transform: none;
+    filter: brightness(.96);
+}
+
+.portfolio-box .project-type,
+.network-project .project-type {
+    font-size: .8rem;
+}
+
+.portfolio-box .project-description,
+.network-project .project-description {
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+.portfolio-box .project-technologies,
+.network-project .project-technologies,
+.project-results {
+    font-size: .76rem;
+    line-height: 1.45;
+}
+
+/* si un projet a beaucoup de texte, le cadre défile au lieu de couper les boutons */
+.portfolio-box,
+.network-project {
+    max-height: 26.6rem;
+    overflow-y: auto;
+}
+
+.portfolio-box::-webkit-scrollbar,
+.network-project::-webkit-scrollbar {
+    width: 3px;
+}
+
+.portfolio-box::-webkit-scrollbar-thumb,
+.network-project::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 10px;
+}
+
+/* boutons : retour à la ligne s'il y en a 3 ou plus (démo, code, rapport…) */
+.project-buttons,
+.network-project-buttons {
+    flex-wrap: wrap;
+    gap: .45rem;
+}
+
+.project-buttons .btn,
+.network-project-buttons .btn {
+    width: 7.4rem;
+    font-size: .76rem;
+}
+
+.project-buttons .btn i,
+.network-project-buttons .btn i {
+    font-size: 1rem;
+}
+
+
+/* =========================
+   FENÊTRE (CV, vidéo, image, PDF)
+   Dimensions en px : elles ne dépendent pas de la taille du livre.
+========================= */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(3, 12, 20, .85);
+    backdrop-filter: blur(3px);
+}
+
+.modal-box {
+    position: relative;
+
+    width: min(1000px, 100%);
+    max-height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+
+    border: 2px solid var(--main-color);
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
+}
+
+.modal-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 12px 10px 16px;
+
+    background: var(--bg-color);
+    color: #fff;
+}
+
+.modal-head h2 {
+    flex: 1;
+    min-width: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.modal-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    background: var(--main-color);
+    border: 2px solid var(--main-color);
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+
+    cursor: pointer;
+    transition: .3s;
+}
+
+.modal-action:hover {
+    background: transparent;
+    color: var(--main-color);
+}
+
+.modal-action i {
+    font-size: 16px;
+}
+
+.modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    background: transparent;
+    border-radius: 6px;
+
+    font-size: 26px;
+    color: #fff;
+
+    cursor: pointer;
+    transition: .3s;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, .15);
+}
+
+.modal-body {
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #0b1a26;
+}
+
+/* CV / PDF */
+
+/* le CV s'affiche comme sur le web : grande fenêtre, presque plein écran */
+.modal[data-type="pdf"] {
+    padding: 2vh 2vw;
+}
+
+.modal[data-type="pdf"] .modal-box {
+    width: min(1300px, 96vw);
+    height: 96vh;
+    max-height: 96vh;
+}
+
+.modal[data-type="pdf"] .modal-body {
+    flex: 1;
+    height: auto;
+    background: #525659;
+}
+
+.modal-frame {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+
+    background: #fff;
+}
+
+.modal-note {
+    width: 100%;
+    padding: 6px 12px;
+
+    background: var(--bg-color);
+    color: rgba(255, 255, 255, .75);
+
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Vidéo */
+
+.modal-video {
+    display: block;
+
+    width: 100%;
+    max-height: 78vh;
+
+    background: #000;
+}
+
+.modal-embed {
+    display: block;
+
+    width: 100%;
+    max-height: 78vh;
+    aspect-ratio: 16 / 9;
+
+    background: #000;
+}
+
+/* Image agrandie */
+
+.modal-img {
+    display: block;
+
+    max-width: 100%;
+    max-height: 82vh;
+
+    object-fit: contain;
+    background: #fff;
+}
+
+/* Fichier introuvable */
+
+.modal-missing {
+    padding: 48px 24px;
+
+    color: #fff;
+    text-align: center;
+}
+
+.modal-missing i {
+    font-size: 48px;
+    color: var(--main-color);
+}
+
+.modal-missing p {
+    margin-top: 8px;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 0;
+    }
+
+    .modal-box {
+        height: 100%;
+
+        border: none;
+        border-radius: 0;
+    }
+
+    .modal[data-type="pdf"] {
+        padding: 0;
+    }
+
+    .modal[data-type="pdf"] .modal-box {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+    }
+
+    .modal-body,
+    .modal[data-type="pdf"] .modal-body {
+        height: auto;
+        flex: 1;
+    }
+
+    .modal-action span {
+        display: none;
+    }
+
+    .modal-action {
+        padding: 7px 9px;
+    }
+}
+
+
+/* =========================
+   MODE DÉFILEMENT (téléphone et petites tablettes)
+   Le livre est remplacé par une lecture verticale :
+   profil, puis chaque page l'une sous l'autre.
+========================= */
+
+@media (max-width: 800px) {
+
+    html {
+        font-size: 19px;
+    }
+
+    body {
+        display: block;
+        min-height: 100vh;
+        overflow: auto;
+        padding: 1rem;
+    }
+
+    .wrapper,
+    .wrapper[data-state] {
+        width: 100%;
+        height: auto;
+
+        scale: none;
+        translate: none;
+
+        perspective: none;
+        animation: none;
+        transition: none;
+    }
+
+    .cover {
+        display: none;
+    }
+
+    .book {
+        display: block;
+        height: auto;
+
+        perspective: none;
+        transform-style: flat;
+        pointer-events: auto;
+    }
+
+    .book-page.page-left,
+    .book-page.page-right {
+        position: static;
+
+        width: 100%;
+        height: auto;
+
+        padding: 0;
+
+        transform: none !important;
+        transition: none;
+        opacity: 1 !important;
+        z-index: auto !important;
+
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .book-page.page-left {
+        padding: 1.5rem 1.2rem;
+        margin-bottom: 1rem;
+        border-radius: .6rem;
+        overflow: visible;
+        background: var(--pages-color);
+    }
+
+    .page-front,
+    .page-back {
+        position: static;
+
+        height: auto;
+        margin-bottom: 1rem;
+        padding: 1.5rem 1.2rem;
+
+        transform: none;
+        border-radius: .6rem;
+        overflow: visible;
+
+        backface-visibility: visible;
+        -webkit-backface-visibility: visible;
+    }
+
+    .profile-page {
+        height: auto;
+    }
+
+    .profile-page h1 {
+        white-space: normal;
+    }
+
+    .profile-page .btn-box {
+        flex-wrap: wrap;
+    }
+
+    .number-page,
+    .nextprev-btn,
+    .back-profile {
+        display: none;
+    }
+
+    .skills-box {
+        max-height: none;
+        overflow: visible;
+        grid-template-columns: 1fr;
+    }
+
+    .services-box {
+        grid-template-columns: 1fr;
+    }
+
+    .btn,
+    .services-content .btn,
+    .project-buttons .btn,
+    .network-project-buttons .btn {
+        width: auto;
+        padding: 0 .9rem;
+    }
+
+    .project-buttons,
+    .network-project-buttons {
+        flex-wrap: wrap;
+    }
+
+    .portfolio-box,
+    .network-project {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .contact-box textarea {
+        height: 8rem;
+    }
+}

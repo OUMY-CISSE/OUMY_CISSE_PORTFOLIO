@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Portfolio d'Oumy Khairy Cisse : ingénieure Réseaux &amp; Systèmes et développeuse Full Stack.">
+    <meta name="theme-color" content="#081b29">
+
+    <!-- Aperçu lors du partage (LinkedIn, WhatsApp…) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Oumy Khairy Cisse | Portfolio">
+    <meta property="og:description" content="Ingénieure Réseaux &amp; Systèmes et développeuse Full Stack.">
+    <!-- Ajoute une image 1200x630 : <meta property="og:image" content="https://ton-site/apercu.png"> -->
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2300abf0'/%3E%3Ctext x='32' y='42' font-size='28' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EOK%3C/text%3E%3C/svg%3E">
+
+    <title>OUMY KHAIRY CISSE | PORTFOLIO</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Box Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="wrapper" data-state="front">
+
+        <!-- =========================
+             COUVERTURES DU LIVRE
+        ========================== -->
+
+        <!-- COUVERTURE AVANT (face extérieure + face intérieure) -->
+        <div class="cover cover-front" id="cover-front" role="button" tabindex="0" aria-label="Ouvrir le portfolio">
+
+            <div class="cover-face cover-outside">
+                <div class="cover-frame">
+
+                    <div class="cover-icons">
+                        <i class="bx bx-network-chart"></i>
+                        <i class="bx bx-code-alt"></i>
+                    </div>
+
+                    <p class="cover-title">Portfolio</p>
+
+                    <span class="cover-line"></span>
+
+                    <p class="cover-name">Oumy Khairy Cisse</p>
+
+                    <p class="cover-role">
+                        Ingénieure Réseaux &amp; Systèmes<br>
+                        Développeuse Full Stack
+                    </p>
+
+                    <svg class="cover-net" viewBox="0 0 300 90" aria-hidden="true">
+                        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".6">
+                            <path d="M10 62 L62 26 L122 56 L182 20 L242 52 L290 26"/>
+                            <path d="M62 26 L92 80 L122 56"/>
+                            <path d="M182 20 L212 80 L242 52"/>
+                        </g>
+                        <g fill="currentColor">
+                            <circle cx="10" cy="62" r="3.5"/>
+                            <circle cx="62" cy="26" r="3.5"/>
+                            <circle cx="122" cy="56" r="3.5"/>
+                            <circle cx="182" cy="20" r="3.5"/>
+                            <circle cx="242" cy="52" r="3.5"/>
+                            <circle cx="290" cy="26" r="3.5"/>
+                            <circle cx="92" cy="80" r="3"/>
+                            <circle cx="212" cy="80" r="3"/>
+                        </g>
+                    </svg>
+
+                    <span class="cover-open">
+                        Ouvrir le livre
+                        <i class="bx bx-chevron-right"></i>
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="cover-face cover-inside"></div>
+
+        </div>
+
+
+        <!-- COUVERTURE ARRIÈRE (face intérieure + face extérieure) -->
+        <div class="cover cover-back" id="cover-back">
+
+            <div class="cover-face cover-inside">
+                <div class="cover-frame">
+
+                    <i class="bx bx-book-open cover-end-icon"></i>
+
+                    <p class="cover-thanks">Merci d'avoir feuilleté ce portfolio.</p>
+
+                    <p class="cover-sub">
+                        Un projet, une question, une opportunité ?
+                        Le formulaire de contact est juste à gauche.
+                    </p>
+
+                    <button type="button" class="btn cover-btn close-book">
+                        Fermer le livre
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="cover-face cover-outside">
+                <div class="cover-frame">
+
+                    <p class="cover-name">Oumy Khairy Cisse</p>
+
+                    <span class="cover-line"></span>
+
+                    <p class="cover-quote">
+                        Comprendre les systèmes, concevoir les solutions
+                        et donner vie aux idées.
+                    </p>
+
+                    <svg class="cover-net" viewBox="0 0 300 90" aria-hidden="true">
+                        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".6">
+                            <path d="M10 62 L62 26 L122 56 L182 20 L242 52 L290 26"/>
+                            <path d="M62 26 L92 80 L122 56"/>
+                            <path d="M182 20 L212 80 L242 52"/>
+                        </g>
+                        <g fill="currentColor">
+                            <circle cx="10" cy="62" r="3.5"/>
+                            <circle cx="62" cy="26" r="3.5"/>
+                            <circle cx="122" cy="56" r="3.5"/>
+                            <circle cx="182" cy="20" r="3.5"/>
+                            <circle cx="242" cy="52" r="3.5"/>
+                            <circle cx="290" cy="26" r="3.5"/>
+                            <circle cx="92" cy="80" r="3"/>
+                            <circle cx="212" cy="80" r="3"/>
+                        </g>
+                    </svg>
+
+                    <button type="button" class="btn cover-btn reopen-book">
+                        Rouvrir le livre
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             LIVRE
+        ========================== -->
+
+        <div class="book">
+
+
+            <!-- =========================
+                 PAGE GAUCHE : PROFIL
+            ========================== -->
+
+            <div class="book-page page-left">
+
+                <div class="profile-page">
+
+                    <!-- Photo -->
+                    <img
+                        src="oumy.jpeg"
+                        alt="Photo de Oumy Khairy Cisse"
+                    >
+
+                    <!-- Nom -->
+                    <h1>OUMY KHAIRY CISSE</h1>
+
+                    <!-- Profession -->
+                    <h3>
+                        Ingénieure Réseaux &amp; Systèmes |
+                        Développeuse Full Stack
+                    </h3>
+
+                    <!-- Réseaux sociaux -->
+                    <div class="social-media">
+
+                        <a href="#" aria-label="LinkedIn" data-link="linkedin" target="_blank" rel="noopener noreferrer" hidden>
+                            <i class="bx bxl-linkedin"></i>
+                        </a>
+
+                        <a href="#" aria-label="GitHub" data-link="github" target="_blank" rel="noopener noreferrer" hidden>
+                            <i class="bx bxl-github"></i>
+                        </a>
+
+                    </div>
+
+
+                    <!-- Présentation -->
+                   <p>
+                        Ingénieure en
+                        <strong>Réseaux &amp; Systèmes</strong> et
+                        <strong>Développeuse Full Stack</strong>, je navigue entre
+                        deux univers complémentaires : celui des infrastructures
+                        informatiques et celui du développement logiciel.
+
+                        J’aime comprendre comment les technologies communiquent,
+                        résoudre des problèmes et transformer une idée en une
+                        solution numérique.
+
+                        Mes projets en réseau et système, mes applications conçues
+                        et mes expérimentations techniques racontent cette volonté :
+                        <strong>
+                            apprendre, construire et évoluer avec la technologie.
+                        </strong>
+
+                        Le tout résumé en une phrase :
+                        <strong>
+                            Comprendre les systèmes, concevoir les solutions
+                            et donner vie aux idées.
+                        </strong>
+                    </p>
+
+
+                    <!-- Boutons -->
+                    <div class="btn-box">
+
+                        <!-- Ouvre le CV dans une fenêtre (voir "cv" dans portfolio-data.js) -->
+                        <button type="button" class="btn" id="cv-btn" data-modal="pdf" data-title="Mon CV" hidden>
+                            <i class="bx bx-file"></i>
+                            Voir mon CV
+                        </button>
+
+                        <a href="#" class="btn contact-me">
+                            Contactez-moi
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 FEUILLE FLIPBOOK
+            ========================== -->
+
+            <div class="book-page page-right" id="turn-1">
+
+
+                <!-- =========================
+                     FACE AVANT : PAGE 1
+                     EXPÉRIENCES
+                ========================== -->
+
+                <div class="page-front">
+
+                    <h1 class="title">
+                        Expériences Professionnelles
+                    </h1>
+
+
+                    <div class="workeduc-box">
+
+                        <!-- EXPÉRIENCE -->
+
+                        <div class="workeduc-content">
+
+                            <span class="year">
+                                <i class="bx bxs-calendar"></i>
+                                Octobre 2023 - Décembre 2023
+                            </span>
+
+                            <h4>
+                                Stagiaire en Développement Full Stack |
+                                Département Système d'Information -
+                                NMA Sanders
+                            </h4>
+
+                            <ul class="work-points">
+                                <li>
+                                    Participation à un atelier intensif de 3 jours
+                                    sur la sécurité informatique, animé par un
+                                    expert agréé.
+                                </li>
+                                <li>
+                                    Développement d’une application de gestion de
+                                    paie pour les journaliers : calcul et gestion
+                                    des rémunérations automatisés.
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <!-- Pour ajouter une expérience, copie le bloc
+                             <div class="workeduc-content"> ci-dessus,
+                             juste en dessous, et change le texte. -->
+
+                    </div>
+
+
+                    <!-- Numéro page 1 -->
+                    <span class="number-page">
+                        1
+                    </span>
+
+
+                    <!-- Bouton suivant -->
+                    <span
+                        class="nextprev-btn"
+                        data-page="turn-1"
+                    >
+                        <i class="bx bx-chevron-right"></i>
+                    </span>
+
+                </div>
+
+
+
+                <!-- =========================
+                     FACE ARRIÈRE : PAGE 2
+                     DIPLÔMES ET FORMATIONS
+                ========================== -->
+
+                <div class="page-back">
+
+                    <h1 class="title">
+                        Diplômes et Formations
+                    </h1>
+
+
+                    <div class="workeduc-box">
+
+                        <div class="workeduc-content">
+
+                            <span class="year">
+                                <i class="bx bxs-calendar"></i>
+                                Juillet 2025 - Jusqu'à présent
+                            </span>
+
+                            <h4>
+                                Master en conception et développement d'applications
+                            </h4>
+
+                            <p>
+                                Université numérique Cheikh Hamidou Kane (UN-CHK).
+                            </p>
+
+                        </div>
+
+                        <div class="workeduc-content">
+
+                            <span class="year">
+                                <i class="bx bxs-calendar"></i>
+                                Novembre 2024 - Août 2026
+                            </span>
+
+                            <h4>
+                                Master Professionnel Réseaux et Systèmes Informatiques
+                            </h4>
+
+                            <p>
+                                Institut Supérieur d'Informatique (ISI).
+                            </p>
+
+                        </div>
+
+                        <div class="workeduc-content">
+
+                            <span class="year">
+                                <i class="bx bxs-calendar"></i>
+                                Janvier 2021 - Février 2025
+                            </span>
+
+                            <h4>
+                                Licence Développement d’Applications Web/Mobile
+                            </h4>
+
+                            <p>
+                                Université numérique Cheikh Hamidou Kane (UN-CHK).
+                            </p>
+
+                        </div>
+
+                        <div class="workeduc-content">
+
+                            <span class="year">
+                                <i class="bx bxs-calendar"></i>
+                                Janvier 2021 - Juillet 2023
+                            </span>
+
+                            <h4>
+                                Licence en Génie Logiciel - Réseaux et Systèmes
+                            </h4>
+
+                            <p>
+                                École d'Ingénieurs - Digital Campus de l'Institut Supérieur de Management (ISM).
+                            </p>
+
+                        </div>
+
+                        <div class="workeduc-content">
+
+                            <span class="year">
+                                <i class="bx bxs-calendar"></i>
+                                Octobre 2019 - Octobre 2020
+                            </span>
+
+                            <h4>
+                                Baccalauréat L2 : Sciences Humaines et Sociales
+                            </h4>
+
+                            <p>
+                                Cours Sacré Cœur.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Numéro page 2 -->
+                    <span class="number-page">
+                        2
+                    </span>
+
+
+                    <!-- Bouton précédent -->
+                    <span
+                        class="nextprev-btn back"
+                        data-page="turn-1"
+                    >
+                        <i class="bx bx-chevron-left"></i>
+                    </span>
+
+                </div>
+
+             </div>
+
+                <!-- pages 3 et 4 -->
+                <div class="book-page page-right" id="turn-2">
+
+                <!-- page 3(mes services ) -->
+                <div class="page-front">
+
+                    <h1 class="title">
+                        Mes Services
+                    </h1>
+
+                    <div class="services-box">
+
+                        <!-- SERVICE 1 -->
+                        <div class="services-content">
+                            <i class="bx bx-network-chart"></i>
+
+                            <h3>Réseaux &amp; Systèmes</h3>
+
+                            <p>
+                                Conception, configuration et administration
+                                des réseaux et systèmes informatiques.
+                            </p>
+
+                            <a href="#" class="btn" data-goto="net">
+                                En savoir plus
+                            </a>
+                        </div>
+
+
+                        <!-- SERVICE 2 -->
+                        <div class="services-content">
+                            <i class="bx bx-code-alt"></i>
+
+                            <h3>Développement Full Stack</h3>
+
+                            <p>
+                                Conception et développement d'applications
+                                web modernes, du frontend au backend.
+                            </p>
+
+                            <a href="#" class="btn" data-goto="dev">
+                                En savoir plus
+                            </a>
+                        </div>
+
+
+                        <!-- SERVICE 3 -->
+                        <div class="services-content">
+                            <i class="bx bx-devices"></i>
+
+                            <h3>Solutions numériques</h3>
+
+                            <p>
+                                Création de solutions informatiques adaptées
+                                aux besoins des utilisateurs et des organisations.
+                            </p>
+
+                            <a href="#" class="btn" data-goto="dev">
+                                En savoir plus
+                            </a>
+                        </div>
+
+
+                        <!-- SERVICE 4 -->
+                        <div class="services-content">
+                            <i class="bx bx-server"></i>
+
+                            <h3>Virtualisation &amp; Déploiement</h3>
+
+                            <p>
+                                Mise en place d'environnements virtualisés
+                                et déploiement de solutions informatiques.
+                            </p>
+
+                            <a href="#" class="btn" data-goto="skills">
+                                En savoir plus
+                            </a>
+                        </div>
+
+                    </div>
+
+                      <!-- Numéro page 1 -->
+                    <span class="number-page">
+                        3
+                    </span>
+
+
+                    <!-- Bouton suivant -->
+                    <span
+                        class="nextprev-btn"
+                        data-page="turn-2"
+                    >
+                        <i class="bx bx-chevron-right"></i>
+                    </span>
+
+                </div>
+                <!-- page 4 (COMPÉTENCES DÉVELOPPEMENT FULL STACK ) -->
+
+                <div class="page-back">
+
+                    <h1 class="title">
+                        Mes Compétences en Développement Full Stack
+                    </h1>
+
+                    <div class="skills-box">
+
+                        <!-- =========================
+                            DÉVELOPPEMENT
+                        ========================== -->
+                        <div class="skills-content">
+
+                            <h3>
+                                <i class="bx bx-code-alt"></i>
+                                Développement Full Stack
+                            </h3>
+
+                            <div class="content">
+
+                                <div class="skills-group">
+
+                                    <h4>Technologies utilisées</h4>
+
+                                    <span>
+                                        <i class="bx bxl-html5"></i>
+                                        HTML
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-css3"></i>
+                                        CSS
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-javascript"></i>
+                                        JavaScript
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-php"></i>
+                                        PHP
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-laravel"></i>
+                                        Laravel
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-java"></i>
+                                        Java
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-data"></i>
+                                        SQL
+                                    </span>
+
+                                </div>
+
+
+                                <div class="skills-group">
+
+                                    <h4>Technologies en apprentissage</h4>
+
+                                    <span>
+                                        <i class="bx bxl-angular"></i>
+                                        Angular
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-react"></i>
+                                        React
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-leaf"></i>
+                                        Spring Boot
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-nodejs"></i>
+                                        Node.js / Express
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-code"></i>
+                                        TypeScript
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =========================
+                            OUTILS DE DÉVELOPPEMENT
+                        ========================== -->
+                        <div class="skills-content">
+
+                            <h3>
+                                <i class="bx bx-wrench"></i>
+                                Outils de développement
+                            </h3>
+
+                            <div class="content">
+
+                                <span>
+                                    <i class="bx bxl-git"></i>
+                                    Git / GitHub
+                                </span>
+
+                                <span>
+                                    <i class="bx bxl-visual-studio"></i>
+                                    VS Code
+                                </span>
+
+                                <span>
+                                    <i class="bx bx-mobile-alt"></i>
+                                    Android Studio
+                                </span>
+
+                                <span>
+                                    <i class="bx bx-send"></i>
+                                    Postman
+                                </span>
+
+                                
+
+                                <span>
+                                    <i class="bx bx-sitemap"></i>
+                                    UML
+                                </span>
+
+                                
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Numéro de page -->
+                    <span class="number-page">
+                        4
+                    </span>
+
+
+                    <!-- Bouton précédent -->
+                    <span
+                        class="nextprev-btn back"
+                        data-page="turn-2"
+                    >
+                        <i class="bx bx-chevron-left"></i>
+                    </span>
+
+                </div>
+
+                </div>
+
+                <!-- =====================================================
+                    PAGE 5 : COMPÉTENCES RÉSEAUX &amp; SYSTÈMES
+                ====================================================== -->
+                 <div class="book-page page-right" id="turn-3">
+
+                    <!-- =========================
+                        FACE AVANT : PAGE 5
+                    ========================== -->
+
+                    <div class="page-front">
+
+                        <h1 class="title">
+                            Mes Compétences en Réseaux &amp; Systèmes
+                        </h1>
+
+                        <div class="skills-box">
+
+                            <!-- =========================
+                                RÉSEAUX &amp; SYSTÈMES
+                            ========================== -->
+                            <div class="skills-content">
+
+                                <h3>
+                                    <i class="bx bx-network-chart"></i>
+                                    Réseaux
+                                </h3>
+
+                                <div class="content">
+
+                                    <span>
+                                        <i class="bx bx-transfer"></i>
+                                        TCP/IP
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-globe"></i>
+                                        IPv4 / IPv6
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-git-branch"></i>
+                                        Routage &amp; Commutation
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-network-chart"></i>
+                                        VLAN
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-server"></i>
+                                        DHCP / DNS
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-cog"></i>
+                                        Configuration réseau
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-server"></i>
+                                        Administration systèmes
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =========================
+                                VIRTUALISATION &amp; INFRASTRUCTURE
+                            ========================== -->
+                            <div class="skills-content">
+
+                                <h3>
+                                    <i class="bx bx-desktop"></i>
+                                    Virtualisation &amp; Infrastructure
+                                </h3>
+
+                                <div class="content">
+
+                                    <span>
+                                        <i class="bx bx-desktop"></i>
+                                        VMware
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-desktop"></i>
+                                        VirtualBox
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bxl-docker"></i>
+                                        Docker &amp; Docker Compose
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-devices"></i>
+                                        Machines virtuelles
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =========================
+                                SÉCURITÉ &amp; SUPERVISION
+                            ========================== -->
+                            <div class="skills-content">
+
+                                <h3>
+                                    <i class="bx bx-shield-quarter"></i>
+                                    Sécurité &amp; Supervision
+                                </h3>
+
+                                <div class="content">
+
+                                    <span>
+                                        <i class="bx bx-shield"></i>
+                                        Wazuh
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-line-chart"></i>
+                                        Zabbix
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-search-alt"></i>
+                                        Graylog
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-bar-chart-alt-2"></i>
+                                        Prometheus
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-bar-chart"></i>
+                                        Grafana
+                                    </span>
+
+                                </div>
+
+                                <small>
+                                    Outils utilisés dans le cadre de projets academiques et de labs techniques.
+                                </small>
+
+                            </div>
+
+
+                            <!-- =========================
+                                OUTILS &amp; LABS RÉSEAUX
+                            ========================== -->
+                            <div class="skills-content">
+
+                                <h3>
+                                    <i class="bx bx-sitemap"></i>
+                                    Outils &amp; Labs Réseaux et Systèmes
+                                </h3>
+
+                                <div class="content">
+
+                                    <span>
+                                        <i class="bx bx-network-chart"></i>
+                                        Cisco Packet Tracer
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-sitemap"></i>
+                                        GNS3
+                                    </span>
+
+                                    
+
+                                    
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Numéro de page -->
+                        <span class="number-page">
+                            5
+                        </span>
+
+
+                        <!-- Bouton précédent -->
+                        
+
+
+                        <!-- Bouton suivant -->
+                        <span
+                            class="nextprev-btn"
+                            data-page="turn-3"
+                        >
+                            <i class="bx bx-chevron-right"></i>
+                        </span>
+
+                    </div>
+
+               
+
+                    <!-- FACE ARRIÈRE : PROJET FULL STACK (générée par script.js depuis portfolio-data.js) -->
+                    <div class="page-back" data-slot="dev-0"></div>
+
+                 </div>
+
+                 <!-- DERNIÈRE FEUILLE : projet Réseaux (généré) + Contact -->
+                 <div class="book-page page-right" id="turn-4">
+
+                    <div class="page-front network-project-page" data-slot="net-last"></div>
+
+                    <div class="page-back">
+
+                        <h1 class="title">
+                            Contactez-moi !
+                        </h1>
+
+                        <div class="contact-box">
+
+                            <ul class="contact-info" id="contact-info"></ul>
+
+                            <form id="contact-form" novalidate>
+                                <input type="text" name="name" class="field" placeholder="Nom Complet" aria-label="Nom complet" required>
+                                <input type="email" name="email" class="field" placeholder="Adresse Email" aria-label="Adresse email" required>
+                                <textarea name="message" cols="30" rows="10" class="field" placeholder="Votre Message" aria-label="Votre message" required></textarea>
+                                <input type="submit" class="btn" value="Envoyer le Message">
+                                <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+                            </form>
+
+                        </div>
+
+                        <span class="number-page">8</span>
+
+                        <span class="nextprev-btn back" data-page="turn-4">
+                            <i class="bx bx-chevron-left"></i>
+                        </span>
+
+                        <a href="#" class="back-profile">
+                            <p>Profil</p>
+                            <i class="bx bxs-user"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FENÊTRE : CV, vidéo de démo, image agrandie, PDF
+         (en dehors du livre pour rester nette et plein écran)
+    ========================== -->
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+
+        <div class="modal-backdrop" data-close></div>
+
+        <div class="modal-box">
+
+            <div class="modal-head">
+                <h2 id="modal-title"></h2>
+
+                <div class="modal-actions">
+                    <a class="modal-action" id="modal-download" href="#" download hidden>
+                        <i class="bx bx-download"></i>
+                        <span>Télécharger</span>
+                    </a>
+
+                    <a class="modal-action" id="modal-newtab" href="#" target="_blank" rel="noopener noreferrer">
+                        <i class="bx bx-link-external"></i>
+                        <span>Nouvel onglet</span>
+                    </a>
+
+                    <button type="button" class="modal-close" data-close aria-label="Fermer la fenêtre">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-body" id="modal-body"></div>
+
+        </div>
+
+    </div>
+
+
+    <script src="portfolio-data.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
